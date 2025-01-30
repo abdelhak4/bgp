@@ -1,0 +1,5 @@
+FROM alpine:latest
+
+RUN apk add --no-cache busybox iputils bind-tools net-tools
+
+CMD ["sh"]

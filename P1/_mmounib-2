@@ -1,0 +1,21 @@
+FROM ubuntu:22.04
+
+RUN apt-get update && apt-get install -y \
+	frr \
+	busybox \
+	net-tools \
+	iproute2 \
+	telnet
+
+RUN sed -i 's/bgpd=no/bgpd=yes/' /etc/frr/daemons
+RUN sed -i 's/ospfd=no/ospfd=yes/' /etc/frr/daemons
+RUN sed -i 's/isisd=no/isisd=yes/' /etc/frr/daemons
+
+RUN chown frr:frr /etc/frr/daemons && \
+	mkdir -p /var/run/frr && \
+	chown frr:frr /var/run/frr	
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
