@@ -1,0 +1,74 @@
+# Set the hostname of the router to "router_ael-mous-1"
+hostname router_ael-mous-1
+
+# Disable IPv6 forwarding on the router
+no ipv6 forwarding
+
+# Start of interface configuration block
+!
+# Start configuration for the eth0 interface
+interface eth0
+
+# Assign the IP address 10.1.1.1 with a subnet mask of 255.255.255.252 (CIDR /30) to eth0
+ ip address 10.1.1.1/30
+
+# Start configuration for the eth1 interface
+interface eth1
+
+# Assign the IP address 10.1.1.5 with a subnet mask of 255.255.255.252 (CIDR /30) to eth1
+ ip address 10.1.1.5/30
+
+# Start configuration for the eth2 interface
+interface eth2
+
+# Assign the IP address 10.1.1.9 with a subnet mask of 255.255.255.252 (CIDR /30) to eth2
+ ip address 10.1.1.9/30
+
+# Start configuration for the loopback interface
+interface lo
+
+# Assign the IP address 1.1.1.1 with a subnet mask of 255.255.255.255 (CIDR /32) to the loopback interface
+ ip address 1.1.1.1/32
+
+# Start configuration for BGP (Border Gateway Protocol) with Autonomous System number 1
+router bgp 1
+
+# Configure the iBGP peer group named "ibgp"
+ neighbor ibgp peer-group
+
+# Configure the BGP neighbor "ibgp" with remote AS 1
+ neighbor ibgp remote-as 1
+
+# Configure the source of BGP updates to be the loopback interface (lo)
+ neighbor ibgp update-source lo
+
+# Configure the BGP listen range for IP address range 1.1.1.0/29 with peer group "ibgp"
+ bgp listen range 1.1.1.0/29 peer-group ibgp
+
+# Enable L2VPN EVPN (Ethernet VPN) address family for BGP
+ !
+ address-family l2vpn evpn
+
+# Activate the EVPN address family with the neighbor "ibgp"
+  neighbor ibgp activate
+
+# Set the "ibgp" neighbor as a route reflector client
+  neighbor ibgp route-reflector-client
+
+# Exit from the L2VPN EVPN address family
+ exit-address-family
+
+# Start configuration for OSPF (Open Shortest Path First) routing protocol
+!
+router ospf
+
+# Configure OSPF to advertise the network 0.0.0.0/0 in area 0
+ network 0.0.0.0/0 area 0
+
+# Start configuration for VTY (Virtual Terminal) lines
+!
+line vty
+
+# End of VTY line configuration block
+!
+

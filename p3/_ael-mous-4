@@ -1,0 +1,71 @@
+# Create a new network bridge interface named br0
+/usr/sbin/ip link add br0 type bridge
+
+# Bring the bridge interface br0 up (activate it)
+/usr/sbin/ip link set dev br0 up
+
+# Create a VXLAN (Virtual Extensible LAN) interface named vxlan10 with ID 10 and destination port 4789
+/usr/sbin/ip link add vxlan10 type vxlan id 10 dstport 4789
+
+# Bring the VXLAN interface vxlan10 up (activate it)
+/usr/sbin/ip link set dev vxlan10 up
+
+# Add the vxlan10 interface to the bridge br0
+brctl addif br0 vxlan10
+
+# Add the eth0 interface to the bridge br0
+brctl addif br0 eth0
+
+# Set the hostname of the router to "router_ael-mous-4"
+hostname router_ael-mous-4
+
+# Disable IPv6 forwarding on the router
+no ipv6 forwarding
+
+# Start configuration for the eth2 interface
+!
+interface eth2
+
+# Assign the IP address 10.1.1.10 with a subnet mask of 255.255.255.252 (CIDR /30) to eth2
+ ip address 10.1.1.10/30
+
+# Assign the OSPF area 0 to eth2 interface for OSPF routing
+ ip ospf area 0
+
+# Start configuration for the loopback interface
+interface lo
+
+# Assign the IP address 1.1.1.4 with a subnet mask of 255.255.255.255 (CIDR /32) to the loopback interface
+ ip address 1.1.1.4/32
+
+# Assign the OSPF area 0 to the loopback interface for OSPF routing
+ ip ospf area 0
+
+# Start configuration for BGP (Border Gateway Protocol) with Autonomous System number 1
+router bgp 1
+
+# Configure the BGP neighbor 1.1.1.1 with remote AS 1
+ neighbor 1.1.1.1 remote-as 1
+
+# Configure the source of BGP updates to be the loopback interface (lo)
+ neighbor 1.1.1.1 update-source lo
+
+# Enable L2VPN EVPN (Ethernet VPN) address family for BGP
+ !
+ address-family l2vpn evpn
+
+# Activate the EVPN address family with the neighbor 1.1.1.1
+  neighbor 1.1.1.1 activate
+
+# Advertise all Virtual Network Identifiers (VNIs) in EVPN
+  advertise-all-vni
+
+# Exit from the L2VPN EVPN address family
+ exit-address-family
+
+# Start configuration for OSPF (Open Shortest Path First) routing protocol
+router ospf
+
+# End of OSPF configuration section
+!
+
