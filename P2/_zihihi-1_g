@@ -1,0 +1,21 @@
+# Create a new bridge interface named 'br0'
+/usr/sbin/ip link add br0 type bridge
+
+# Assign the IP address 10.1.1.1/24 to the eth0 interface
+/usr/sbin/ip addr add 10.1.1.1/24 dev eth0
+
+# Create a new VXLAN interface named 'vxlan10' with ID 10 using eth0 as the underlying device, multicast group 239.1.1.1, and destination port 4789
+/usr/sbin/ip link add name vxlan10 type vxlan id 10 dev eth0 group 239.1.1.1 dstport 4789
+
+# Bring up the bridge interface (br0)
+/usr/sbin/ip link set dev br0 up
+
+# Bring up the VXLAN interface (vxlan10)
+/usr/sbin/ip link set dev vxlan10 up
+
+# Add eth1 interface to the br0 bridge (this will include eth1 in the bridge)
+brctl addif br0 eth1
+
+# Add vxlan10 interface to the br0 bridge (this will include vxlan10 in the bridge)
+brctl addif br0 vxlan10
+

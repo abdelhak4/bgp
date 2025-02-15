@@ -5,7 +5,8 @@ RUN apt-get update && apt-get install -y \
 	busybox \
 	net-tools \
 	iproute2 \
-	telnet
+	telnet \
+	bridge-utils
 
 RUN sed -i 's/bgpd=no/bgpd=yes/' /etc/frr/daemons
 RUN sed -i 's/ospfd=no/ospfd=yes/' /etc/frr/daemons

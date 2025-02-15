@@ -16,8 +16,8 @@ brctl addif br0 vxlan10
 # Add the eth0 interface to the bridge br0
 brctl addif br0 eth0
 
-# Set the hostname of the router to "router_ael-mous-4"
-hostname router_ael-mous-4
+# Set the hostname of the router to "router_zihihi-4"
+hostname router_zihihi-4
 
 # Disable IPv6 forwarding on the router
 no ipv6 forwarding

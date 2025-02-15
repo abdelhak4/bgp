@@ -19,8 +19,8 @@ brctl addif br0 eth1
 
 
 
-# Set the hostname of the router to "router_ael-mous-2"
-hostname router_ael-mous-2                      
+# Set the hostname of the router to "router_zihihi-2"
+hostname router_zihihi-2                      
 
 # Disable IPv6 forwarding on the router
 no ipv6 forwarding                               
